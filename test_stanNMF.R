@@ -1,6 +1,8 @@
 library(httr)
 library(dplyr)
 library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = min(3,parallel::detectCores()))
 
 ## test Stan model implementation
 
@@ -56,10 +58,10 @@ stan_data <- list(
 
 ## ---- test stan model ---- 
 
-test <-  rstan::stan('nmf_plca_transcribe.stan', data = stan_data, iter = 10, chains = 1)
-
+test_is <-  rstan::stan('nmf_is_transcribe.stan', data = stan_data, iter = 10, chains = 1, init_r = 0.2)
 stanNMFis <- rstan::stan('nmf_is_transcribe.stan', data = stan_data, iter = 1000, chains = 4)
 
+test_plca <-  rstan::stan('nmf_plca_transcribe.stan', data = stan_data, iter = 10, chains = 1, init_r = 0.2)
 stanNMFplca <- rstan::stan('nmf_plca_transcribe.stan', data = stan_data, iter = 1000, chains = 4)
 
 
